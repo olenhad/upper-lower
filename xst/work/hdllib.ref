@@ -1,0 +1,8 @@
+AR counter behavioral "C:/Users/pc richard/Documents/CG3207/lab1/COUNTER.vhd" sub00/vhpl07 1378237638
+EN rom NULL "C:/Users/pc richard/Documents/CG3207/lab1/ROM.vhd" sub00/vhpl00 1378228887
+AR rom behavioral "C:/Users/pc richard/Documents/CG3207/lab1/ROM.vhd" sub00/vhpl01 1378228888
+AR addsub behavioral "C:/Users/pc richard/Documents/CG3207/lab1/ADDSUB.vhd" sub00/vhpl05 1378236689
+EN counter NULL "C:/Users/pc richard/Documents/CG3207/lab1/COUNTER.vhd" sub00/vhpl06 1378237637
+EN addsub NULL "C:/Users/pc richard/Documents/CG3207/lab1/ADDSUB.vhd" sub00/vhpl04 1378236688
+EN comparator NULL "C:/Users/pc richard/Documents/CG3207/lab1/COMPARATOR.vhd" sub00/vhpl02 1378236723
+AR comparator behavioral "C:/Users/pc richard/Documents/CG3207/lab1/COMPARATOR.vhd" sub00/vhpl03 1378236724
