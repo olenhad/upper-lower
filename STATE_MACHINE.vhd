@@ -60,7 +60,26 @@ begin
 				end if;
 		-- addsub control
 			elsif (control_state = control_addsub) then
-				if (OP = b"")
+				if (CMPR_RESULT = b"00") then
+					ADDSUB_CONTROL <= b"00";
+				-- if lower case letter
+				elsif (CMPR_RESULT = b"01") then
+				-- if converting to upper case
+					if (OP = b"10") then
+						ADDSUB_CONTROL <= b"10";
+				-- else nop
+					else
+						ADDSUB_CONTROL <= b"00";
+					end if;
+				-- if upper case letter
+				elsif (CMPR_RESULT = b"10") then
+					if (OP = b"01") then
+						ADDSUB_CONTROL <= b"01";
+					else
+						ADDSUB_CONTROL <= b"00";
+					end if;
+				end if;
+				
 			end if;
 		end if;
 	end process;

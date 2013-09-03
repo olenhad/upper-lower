@@ -43,8 +43,10 @@ begin
 	begin
 		if (CLK'event and CLK='1') then
 			if (CONTROL = b"01") then
+			-- to lowercase
 				RESULT <= std_logic_vector(unsigned(DATA) + X"20");
 			elsif (CONTROL = b"10") then
+			-- to uppercase
 				RESULT <= std_logic_vector(unsigned(DATA) - X"20");
 			else
 				RESULT <= DATA;

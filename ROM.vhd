@@ -31,7 +31,7 @@ use ieee.std_logic_unsigned.all;
 
 entity ROM is
 port (CLK : in std_logic;
-		ADDR: in std_logic_vector(5 downto 0);
+		ADDR: in std_logic_vector(4 downto 0);
 		DATA : out std_logic_vector(7 downto 0));
 end ROM;
 

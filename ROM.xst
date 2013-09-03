@@ -1,5 +1,0 @@
-set -tmpdir "C:/Users/pc richard/Documents/CG3207/lab1/xst/projnav.tmp"
-set -xsthdpdir "C:/Users/pc richard/Documents/CG3207/lab1/xst"
-elaborate
--ifn ROM.prj
--ifmt mixed

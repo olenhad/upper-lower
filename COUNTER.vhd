@@ -32,18 +32,18 @@ use IEEE.NUMERIC_STD.ALL;
 entity COUNTER is
     Port ( CONTROL : in  STD_LOGIC_VECTOR(1 downto 0);
            CLK : in  STD_LOGIC;
-           COUNT : out  STD_LOGIC_VECTOR(5 downto 0));
+           COUNT : out  STD_LOGIC_VECTOR(4 downto 0));
 end COUNTER;
 
 architecture Behavioral of COUNTER is
 
 begin
 	process(CLK)
-	variable cur_count : std_logic_vector(5 downto 0) := b"000000";
+	variable cur_count : std_logic_vector(4 downto 0) := b"00000";
 	begin
 		if rising_edge(CLK) then
 			if (CONTROL = b"11") then
-				cur_count := b"000000";
+				cur_count := b"00000";
 			elsif (CONTROL = b"01") then
 				cur_count := std_logic_vector(unsigned(cur_count) + 1);
 			end if;
