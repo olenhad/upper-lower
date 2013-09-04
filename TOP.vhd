@@ -31,9 +31,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity TOP is
     Port ( OP : in  STD_LOGIC_VECTOR(1 DOWNTO 0);
+			  MSB : in std_logic;
            CLK : in  STD_LOGIC;
            RESET : in  STD_LOGIC;
-           RESULT : out  STD_LOGIC_VECTOR(7 DOWNTO 0));
+           RESULT : out  STD_LOGIC_VECTOR(3 DOWNTO 0));
 end TOP;
 
 architecture Behavioral of TOP is
@@ -71,18 +72,26 @@ component counter is
            CLK : in  STD_LOGIC;
            COUNT : out  STD_LOGIC_VECTOR(4 downto 0));
 end component;
+component mux_2_1 is
+    Port ( I0 : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           I1 : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           C : in  STD_LOGIC;
+           O : out  STD_LOGIC_VECTOR(3 DOWNTO 0));
+end component;
+
 signal counter_control : STD_LOGIC_VECTOR(1 downto 0);
 signal compare_result : STD_LOGIC_VECTOR(1 downto 0);
 signal addsub_control : STD_LOGIC_VECTOR(1 downto 0);
 signal counter_result : std_logic_vector(4 downto 0);
 signal rom_data : std_logic_vector(7 downto 0);
+signal addsub_output :std_logic_vector(7 downto 0);
 begin
 
 t_sm : state_machine PORT MAP(OP,RESET,CLK, compare_result, counter_control,addsub_control);
 t_counter : counter PORT MAP(counter_control, CLK, counter_result);
 t_rom : ROM PORT MAP(CLK, counter_result, rom_data);
 t_comparator : comparator PORT MAP(rom_data,CLK,compare_result);
-t_addsub : addsub PORT MAP(rom_data, addsub_control,clk, RESULT);
-
+t_addsub : addsub PORT MAP(rom_data, addsub_control,clk, addsub_output);
+t_mux : mux_2_1 PORT MAP(addsub_output(7 downto 4),addsub_output(3 downto 0),MSB,RESULT);
 end Behavioral;
 
