@@ -35,8 +35,9 @@ port (CLK : in std_logic;
 		DATA : out std_logic_vector(7 downto 0));
 end ROM;
 
+
 architecture Behavioral of ROM is
-	type rom_type is array (31 downto 0) of std_logic_vector(7 downto 0);
+	type rom_type is array (0 to 31) of std_logic_vector(7 downto 0);
 -- data contains "Hello World. Hardware rocks alot"	
 	signal rom_data : rom_type := (X"48",X"65",X"6C",X"6C",X"6F",
 											 X"20",X"57",X"6f",X"6F",X"72",

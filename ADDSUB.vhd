@@ -40,16 +40,20 @@ architecture Behavioral of ADDSUB is
 
 begin
 	process(CLK)
+	variable result_latch : std_logic_vector(7 downto 0) := x"00";
 	begin
 		if (CLK'event and CLK='1') then
+			
 			if (CONTROL = b"01") then
+				RESULT <= result_latch;
 			-- to lowercase
-				RESULT <= std_logic_vector(unsigned(DATA) + X"20");
+				result_latch := std_logic_vector(unsigned(DATA) + X"20");
 			elsif (CONTROL = b"10") then
+				RESULT <= result_latch;
 			-- to uppercase
-				RESULT <= std_logic_vector(unsigned(DATA) - X"20");
+				result_latch := std_logic_vector(unsigned(DATA) - X"20");
 			else
-				RESULT <= DATA;
+				result_latch := DATA;
 			end if;
 		end if;
 	end process;

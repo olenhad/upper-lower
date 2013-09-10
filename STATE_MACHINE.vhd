@@ -39,47 +39,57 @@ entity STATE_MACHINE is
 end STATE_MACHINE;
 
 architecture Behavioral of STATE_MACHINE is
-type SM_STATE is (CONTROL_COUNTER, CONTROL_ADDSUB);
+type SM_STATE is (NOP,CONTROL_COUNTER, CONTROL_ADDSUB);
 begin
 	process(CLK)
 	variable control_state : SM_STATE := control_counter;
+	variable op_latch : std_logic_vector(1 downto 0) := b"00";
 	begin
 		if rising_edge(CLK) then
-		-- Counter control
-			if (control_state = control_counter) then
-				if (RESET = '1') then
-					COUNTER_CONTROL <= b"11";
-					control_state := control_addsub;
-				else 
-					if (OP = b"01" or OP = b"10") then
-						COUNTER_CONTROL <= b"01";
-						control_state := control_addsub;
-					else
-						COUNTER_CONTROL <= b"00";
-					end if;
-				end if;
-		-- addsub control
-			elsif (control_state = control_addsub) then
-				if (CMPR_RESULT = b"00") then
+			OP_LATCH := OP;
+			if (OP_LATCH = b"00") then
+				COUNTER_CONTROL <= b"00";
+				ADDSUB_CONTROL <= b"00";
+				control_state := CONTROL_COUNTER;
+			elsif (OP_LATCH = b"01") then
+			-- OP declares to lowercase
+				if (control_state = CONTROL_COUNTER) then
+					COUNTER_CONTROL <= b"01";
 					ADDSUB_CONTROL <= b"00";
-				-- if lower case letter
-				elsif (CMPR_RESULT = b"01") then
-				-- if converting to upper case
-					if (OP = b"10") then
+					control_state := CONTROL_ADDSUB;
+				elsif (control_state = CONTROL_ADDSUB) then
+					COUNTER_CONTROL <= b"00";
+					if (CMPR_RESULT = b"01") then
+					-- already lowercase is NOP
+						ADDSUB_CONTROL <= b"00";
+					elsif (CMPR_RESULT = b"10") then
 						ADDSUB_CONTROL <= b"10";
-				-- else nop
-					else
-						ADDSUB_CONTROL <= b"00";
 					end if;
-				-- if upper case letter
-				elsif (CMPR_RESULT = b"10") then
-					if (OP = b"01") then
-						ADDSUB_CONTROL <= b"01";
-					else
-						ADDSUB_CONTROL <= b"00";
-					end if;
+					control_state := NOP;
+				elsif (control_state = NOP) then
+					COUNTER_CONTROL <= b"00";
+					ADDSUB_CONTROL <= b"00";
 				end if;
-				
+			
+			elsif (OP_LATCH = b"10") then
+			-- OP declares to uppercase
+				if (control_state = CONTROL_COUNTER) then
+					COUNTER_CONTROL <= b"01";
+					ADDSUB_CONTROL <= b"00";
+					control_state := CONTROL_ADDSUB;
+				elsif (control_state = CONTROL_ADDSUB) then
+					COUNTER_CONTROL <= b"00";
+					if (CMPR_RESULT = b"01") then
+						ADDSUB_CONTROL <= b"01";
+					elsif (CMPR_RESULT = b"10") then
+					-- already uppercase implies NOP
+						ADDSUB_CONTROL <= b"10";
+					end if;
+					control_state := NOP;
+				elsif (control_state = NOP) then
+					COUNTER_CONTROL <= b"00";
+					ADDSUB_CONTROL <= b"00";
+				end if;
 			end if;
 		end if;
 	end process;
