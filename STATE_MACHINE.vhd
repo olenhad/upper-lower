@@ -43,54 +43,31 @@ type SM_STATE is (NOP,CONTROL_COUNTER, CONTROL_ADDSUB);
 begin
 	process(CLK)
 	variable control_state : SM_STATE := control_counter;
-	variable op_latch : std_logic_vector(1 downto 0) := b"00";
+	variable is_op_active : std_logic := '0';
 	begin
 		if rising_edge(CLK) then
-			OP_LATCH := OP;
-			if (OP_LATCH = b"00") then
-				COUNTER_CONTROL <= b"00";
-				ADDSUB_CONTROL <= b"00";
-				control_state := CONTROL_COUNTER;
-			elsif (OP_LATCH = b"01") then
-			-- OP declares to lowercase
-				if (control_state = CONTROL_COUNTER) then
-					COUNTER_CONTROL <= b"01";
-					ADDSUB_CONTROL <= b"00";
-					control_state := CONTROL_ADDSUB;
-				elsif (control_state = CONTROL_ADDSUB) then
-					COUNTER_CONTROL <= b"00";
-					if (CMPR_RESULT = b"01") then
-					-- already lowercase is NOP
-						ADDSUB_CONTROL <= b"00";
-					elsif (CMPR_RESULT = b"10") then
-						ADDSUB_CONTROL <= b"10";
-					end if;
-					control_state := NOP;
-				elsif (control_state = NOP) then
-					COUNTER_CONTROL <= b"00";
-					ADDSUB_CONTROL <= b"00";
-				end if;
-			
-			elsif (OP_LATCH = b"10") then
-			-- OP declares to uppercase
-				if (control_state = CONTROL_COUNTER) then
-					COUNTER_CONTROL <= b"01";
-					ADDSUB_CONTROL <= b"00";
-					control_state := CONTROL_ADDSUB;
-				elsif (control_state = CONTROL_ADDSUB) then
-					COUNTER_CONTROL <= b"00";
-					if (CMPR_RESULT = b"01") then
-						ADDSUB_CONTROL <= b"01";
-					elsif (CMPR_RESULT = b"10") then
-					-- already uppercase implies NOP
-						ADDSUB_CONTROL <= b"10";
-					end if;
-					control_state := NOP;
-				elsif (control_state = NOP) then
-					COUNTER_CONTROL <= b"00";
-					ADDSUB_CONTROL <= b"00";
-				end if;
+		
+			if ((OP = "01" or OP = "10") and is_op_active = '0') then
+				is_op_active := '1';
+			else
+				is_op_active := '0';
 			end if;
+			
+			if (OP = b"00") then
+				COUNTER_CONTROL <= b"00";
+			elsif ((OP = "01" or OP = "10") and is_op_active = '1') then
+				COUNTER_CONTROL <= b"01";
+			end if;
+			
+			if (CMPR_RESULT = b"10") then
+				ADDSUB_CONTROL <= b"01";
+			elsif (CMPR_RESULT = b"01") then
+				ADDSUB_CONTROL <= b"10";
+				
+			else
+				ADDSUB_CONTROL <= b"00";
+			end if;
+			
 		end if;
 	end process;
 

@@ -46,7 +46,7 @@ ARCHITECTURE behavior OF test_lab IS
          CLK : IN  std_logic;
          RESET : IN  std_logic;
 			DEBUG : out STD_LOGIC_VECTOR(7 downto 0);
-			Daddr : out std_logic_vector(4 downto 0);
+			Drom : out std_logic_vector(7 downto 0);
          RESULT : OUT  std_logic_vector(3 downto 0)
         );
     END COMPONENT;
@@ -62,7 +62,7 @@ ARCHITECTURE behavior OF test_lab IS
  	--Outputs
    signal RESULT : std_logic_vector(3 downto 0);
 	signal DEBUG : std_logic_vector(7 downto 0);
-	signal daddr : std_logic_vector(4 downto 0);
+	signal drom : std_logic_vector(7 downto 0);
    -- Clock period definitions
    constant CLK_period : time := 10 ns;
  
@@ -75,7 +75,7 @@ BEGIN
           CLK => CLK,
           RESET => RESET,
 			 DEBUG => DEBUG,
-			 daddr => daddr,
+			 drom => drom,
           RESULT => RESULT
         );
    -- Clock process definitions
@@ -127,6 +127,15 @@ BEGIN
 		OP <= "00";
 		MSB <= '0';
 		
+		wait for CLK_period;
+		OP <= "01";
+		MSB <= '0';
+		
+		wait for CLK_period*5;
+		OP <= "00";
+		MSB <= '0';
+		
+		wait for CLK_period*3;
       wait;
    end process;
 

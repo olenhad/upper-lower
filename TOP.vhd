@@ -35,7 +35,7 @@ entity TOP is
            CLK : in  STD_LOGIC;
            RESET : in  STD_LOGIC;
 			  DEBUG : out STD_LOGIC_VECTOR(7 downto 0);
-			  Daddr : out std_logic_vector(4 downto 0);
+			  DROM : out std_logic_vector(7 downto 0);
            RESULT : out  STD_LOGIC_VECTOR(3 DOWNTO 0));
 end TOP;
 
@@ -96,7 +96,8 @@ t_comparator : comparator PORT MAP(rom_data,CLK,compare_result);
 t_addsub : addsub PORT MAP(rom_data, addsub_control,clk, addsub_output);
 t_mux : mux_2_1 PORT MAP(addsub_output(7 downto 4),addsub_output(3 downto 0),MSB,RESULT);
 
-DEBUG <= rom_data;
-daddr <= counter_result;
+
+DEBUG <= addsub_output;
+drom <= rom_data;
 end Behavioral;
 

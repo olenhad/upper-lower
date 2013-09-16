@@ -47,9 +47,8 @@ begin
 			elsif (CONTROL = b"01") then
 				cur_count := std_logic_vector(unsigned(cur_count) + 1);
 			end if;
-			
+			COUNT <= cur_count;
 		end if;
-		COUNT <= cur_count;
 	end process;
 
 end Behavioral;

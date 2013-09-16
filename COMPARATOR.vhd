@@ -45,16 +45,16 @@ architecture Behavioral of COMPARATOR is
 begin
 	process(CLK)
 	begin
-		if (CLK'event and CLK='1') then
-			if (DATA >= X"41" and DATA <= X"5A") then
-				RESULT <= CMPR_RESULT_UPPER_LETTER;
-			elsif (DATA >= X"61" and DATA <= X"7A") then
-				RESULT <= CMPR_RESULT_LOWER_LETTER;
-			else
-				RESULT <= CMPR_RESULT_NON_LETTER;
-			end if;
+	if rising_edge(CLK) then
+		if (DATA >= X"41" and DATA <= X"5A") then
+			result <= CMPR_RESULT_UPPER_LETTER;
+		elsif (DATA >= X"61" and DATA <= X"7A") then
+			result <= CMPR_RESULT_LOWER_LETTER;
+		else
+			result <= CMPR_RESULT_NON_LETTER;
 		end if;
-	end process;
+	end if;
 
+	end process;
 end Behavioral;
 

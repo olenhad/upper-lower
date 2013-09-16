@@ -54,6 +54,7 @@ begin
 	process(CLK)
 	begin
 		if (CLK'event and CLK='1') then
+			
 			DATA <= data_sig;
 		end if;
 	end process;
