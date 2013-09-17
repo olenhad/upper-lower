@@ -37,6 +37,7 @@ entity TOP is
 			  DEBUG : out STD_LOGIC_VECTOR(7 downto 0);
 			  DROM : out std_logic_vector(7 downto 0);
 			  daddr:out std_logic_vector(4 downto 0);
+			  dcmpr: out std_logic_vector(1 downto 0);
            RESULT : out  STD_LOGIC_VECTOR(3 DOWNTO 0));
 end TOP;
 
@@ -87,12 +88,13 @@ begin
 
 t_sm : state_machine PORT MAP(OP,RESET,CLK, compare_result, counter_control,addsub_control);
 t_rom : ROM PORT MAP(CLK, counter_control, rom_data);
-t_comparator : comparator PORT MAP(rom_data,CLK,compare_result);
+t_comparator : comparator PORT MAP(rom_data,CLK, compare_result);
 t_addsub : addsub PORT MAP(rom_data, addsub_control,clk, addsub_output);
 t_mux : mux_2_1 PORT MAP(addsub_output(7 downto 4),addsub_output(3 downto 0),MSB,RESULT);
 
 
 DEBUG <= addsub_output;
 drom <= rom_data;
+dcmpr <= compare_result;
 end Behavioral;
 
