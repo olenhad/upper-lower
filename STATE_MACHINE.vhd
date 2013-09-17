@@ -57,6 +57,8 @@ begin
 				COUNTER_CONTROL <= b"00";
 			elsif ((OP = "01" or OP = "10") and is_op_active = '1') then
 				COUNTER_CONTROL <= b"01";
+			else 
+				COUNTER_CONTROL <= b"00";
 			end if;
 			
 			if (CMPR_RESULT = b"10") then

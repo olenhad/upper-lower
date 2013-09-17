@@ -24,6 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 use IEEE.NUMERIC_STD.ALL;
 use ieee.std_logic_unsigned.all;
+use ieee.std_logic_misc.all;
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
 --library UNISIM;
@@ -52,11 +53,16 @@ begin
 
 	data_sig <= rom_data(conv_integer(ADDR));
 	process(CLK)
+	variable current_value : std_logic_vector(7 downto 0) := x"00";
+	variable next_address : std_logic_vector(4 downto 0) := b"00000";
 	begin
 		if (CLK'event and CLK='1') then
-			
-			DATA <= data_sig;
+			if (or_reduce(ADDR xor next_address) = '1') then
+				current_value := rom_data(conv_integer(next_address));
+				next_address := ADDR;
+			end if;
 		end if;
+		DATA <= current_value;
 	end process;
 end Behavioral;
 
