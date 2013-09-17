@@ -68,7 +68,7 @@ ARCHITECTURE behavior OF test_lab IS
 	signal daddr : std_logic_vector(4 downto 0);
 	signal dcmpr : std_logic_vector(1 downto 0);
    -- Clock period definitions
-   constant CLK_period : time := 10 ns;
+   constant CLK_period : time := 62.5 ns;
  
 BEGIN
  
