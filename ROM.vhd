@@ -32,9 +32,10 @@ use ieee.std_logic_misc.all;
 
 entity ROM is
 port (CLK : in std_logic;
-		ADDR: in std_logic_vector(4 downto 0);
+		CONTROL : in  STD_LOGIC_VECTOR(1 downto 0);
 		DATA : out std_logic_vector(7 downto 0));
 end ROM;
+
 
 
 architecture Behavioral of ROM is
@@ -51,16 +52,17 @@ architecture Behavioral of ROM is
 
 begin
 
-	data_sig <= rom_data(conv_integer(ADDR));
 	process(CLK)
 	variable current_value : std_logic_vector(7 downto 0) := x"00";
-	variable next_address : std_logic_vector(4 downto 0) := b"00000";
+	variable current_address : std_logic_vector(4 downto 0) := b"00000";
 	begin
 		if (CLK'event and CLK='1') then
-			if (or_reduce(ADDR xor next_address) = '1') then
-				current_value := rom_data(conv_integer(next_address));
-				next_address := ADDR;
+			if (CONTROL = b"01") then
+				current_address := std_logic_vector(unsigned(current_address) + 1);
+			elsif (CONTROL = b"11") then
+				current_address := b"00000";
 			end if;
+			current_value := rom_data(conv_integer(current_address));
 		end if;
 		DATA <= current_value;
 	end process;

@@ -37,6 +37,9 @@ entity STATE_MACHINE is
            CMPR_RESULT : in  STD_LOGIC_VECTOR(1 DOWNTO 0);
            COUNTER_CONTROL : out  STD_LOGIC_VECTOR(1 DOWNTO 0);
            ADDSUB_CONTROL : out  STD_LOGIC_VECTOR(1 DOWNTO 0));
+	constant CMPR_RESULT_NON_LETTER :STD_LOGIC_VECTOR(1 downto 0) := b"00";
+	constant CMPR_RESULT_LOWER_LETTER :STD_LOGIC_VECTOR(1 downto 0) := b"01";
+	constant CMPR_RESULT_UPPER_LETTER :STD_LOGIC_VECTOR(1 downto 0) := b"10";
 end STATE_MACHINE;
 
 architecture Behavioral of STATE_MACHINE is
@@ -60,16 +63,16 @@ begin
 			else 
 				COUNTER_CONTROL <= b"00";
 			end if;
-			
-			if (CMPR_RESULT = b"10") then
-				ADDSUB_CONTROL <= b"01";
-			elsif (CMPR_RESULT = b"01") then
-				ADDSUB_CONTROL <= b"10";
-				
-			else
-				ADDSUB_CONTROL <= b"00";
+			if((OP = "01" or OP = "10") and is_op_active = '1') then
+				if (CMPR_RESULT = b"10") then
+					ADDSUB_CONTROL <= b"01";
+				elsif (CMPR_RESULT = b"01") then
+					ADDSUB_CONTROL <= b"10";
+				else
+					ADDSUB_CONTROL <= b"00";
+				end if;
 			end if;
-			
+
 		end if;
 	end process;
 

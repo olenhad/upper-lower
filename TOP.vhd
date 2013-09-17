@@ -51,8 +51,8 @@ component state_machine is
 end component;
 
 component ROM is
-port (CLK : in std_logic;
-		ADDR: in std_logic_vector(4 downto 0);
+Port (CLK : in std_logic;
+		CONTROL : in  STD_LOGIC_VECTOR(1 downto 0);
 		DATA : out std_logic_vector(7 downto 0));
 end component;
 
@@ -70,11 +70,6 @@ component comparator is
            RESULT : out  STD_LOGIC_VECTOR(1 downto 0));
 end component;
 
-component counter is
-    Port ( CONTROL : in  STD_LOGIC_VECTOR(1 downto 0);
-           CLK : in  STD_LOGIC;
-           COUNT : out  STD_LOGIC_VECTOR(4 downto 0));
-end component;
 component mux_2_1 is
     Port ( I0 : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
            I1 : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -91,8 +86,7 @@ signal addsub_output :std_logic_vector(7 downto 0);
 begin
 
 t_sm : state_machine PORT MAP(OP,RESET,CLK, compare_result, counter_control,addsub_control);
-t_counter : counter PORT MAP(counter_control, CLK, counter_result);
-t_rom : ROM PORT MAP(CLK, counter_result, rom_data);
+t_rom : ROM PORT MAP(CLK, counter_control, rom_data);
 t_comparator : comparator PORT MAP(rom_data,CLK,compare_result);
 t_addsub : addsub PORT MAP(rom_data, addsub_control,clk, addsub_output);
 t_mux : mux_2_1 PORT MAP(addsub_output(7 downto 4),addsub_output(3 downto 0),MSB,RESULT);
@@ -100,6 +94,5 @@ t_mux : mux_2_1 PORT MAP(addsub_output(7 downto 4),addsub_output(3 downto 0),MSB
 
 DEBUG <= addsub_output;
 drom <= rom_data;
-daddr <= counter_result;
 end Behavioral;
 
