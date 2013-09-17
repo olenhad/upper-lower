@@ -28,6 +28,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- any Xilinx primitives in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
+use ieee.std_logic_misc.all;
 
 entity STATE_MACHINE is
     Port ( OP : in  STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -44,15 +45,14 @@ begin
 	process(CLK)
 	variable control_state : SM_STATE := control_counter;
 	variable is_op_active : std_logic := '0';
+	variable op_latch : std_logic_vector(1 downto 0) := b"00";
 	begin
 		if rising_edge(CLK) then
 		
-			if ((OP = "01" or OP = "10") and is_op_active = '0') then
-				is_op_active := '1';
-			else
-				is_op_active := '0';
+			is_op_active := or_reduce(OP xor op_latch);
+			if(is_op_active = '1') then
+				op_latch := OP;
 			end if;
-			
 			if (OP = b"00") then
 				COUNTER_CONTROL <= b"00";
 			elsif ((OP = "01" or OP = "10") and is_op_active = '1') then
