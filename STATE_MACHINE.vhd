@@ -64,10 +64,12 @@ begin
 				COUNTER_CONTROL <= b"00";
 			end if;
 			if((OP = "01" or OP = "10") and is_op_active = '1') then
-				if (CMPR_RESULT = b"10") then
+				if (CMPR_RESULT = b"10" and OP = b"01") then
+				-- to lowercase
 					ADDSUB_CONTROL <= b"01";
-				elsif (CMPR_RESULT = b"01") then
-					ADDSUB_CONTROL <= b"10";
+				elsif (CMPR_RESULT = b"01" and OP = b"10") then
+				-- to uppercase
+					ADDSUB_CONTROL <= b"11";
 				else
 					ADDSUB_CONTROL <= b"00";
 				end if;
