@@ -125,7 +125,7 @@ BEGIN
 		OP <= "01";
 		MSB <= '0';
 		
-		wait for CLK_period;
+		wait for CLK_period*100;
 		OP <= "00";
 		MSB <= '0';
 		
@@ -135,15 +135,15 @@ BEGIN
 		
 		wait for CLK_period;
 		OP <= "01";
-		MSB <= '0';
-		
+		MSB <= '0';		
 		wait for CLK_period*5;
+		
 		OP <= "00";
 		MSB <= '0';
 		wait for CLK_period*3;
-		
+
 		OP <= "01";
-		wait for CLK_period*2;
+		wait for CLK_period*100;
 		
 		OP <= "00";
 		wait for CLK_period*5;

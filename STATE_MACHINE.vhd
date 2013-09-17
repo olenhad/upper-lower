@@ -65,8 +65,9 @@ begin
 			end if;
 			
 			if(debounce_state = COUNTING) then
-				if debounce_count = x"FFF" then
+				if debounce_count = x"64" then
 					debounce_state := DONE;
+					debounce_count := x"000";
 				end if;
 				debounce_count := std_logic_vector(unsigned(debounce_count) + 1);
 			end if;
@@ -75,7 +76,7 @@ begin
 				op_latch := OP;
 			end if;
 			
-			if (OP_latch = b"00") then
+			if (OP_latch = b"00" and debounce_state = DONE) then
 				COUNTER_CONTROL <= b"00";
 			elsif ((OP_latch = "01" or OP_latch = "10") and is_op_active = '1') then
 				COUNTER_CONTROL <= b"01";
