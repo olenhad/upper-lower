@@ -52,28 +52,35 @@ begin
 	begin
 		if rising_edge(CLK) then
 		
-			is_op_active := or_reduce(OP xor op_latch);
-			if(is_op_active = '1') then
-				op_latch := OP;
-			end if;
-			if (OP = b"00") then
-				COUNTER_CONTROL <= b"00";
-			elsif ((OP = "01" or OP = "10") and is_op_active = '1') then
-				COUNTER_CONTROL <= b"01";
-			else 
-				COUNTER_CONTROL <= b"00";
-			end if;
-			if((OP = "01" or OP = "10") and is_op_active = '1') then
-				if (CMPR_RESULT = b"10" and OP = b"01") then
-				-- to lowercase
-					ADDSUB_CONTROL <= b"01";
-				elsif (CMPR_RESULT = b"01" and OP = b"10") then
-				-- to uppercase
-					ADDSUB_CONTROL <= b"11";
-				else
-					ADDSUB_CONTROL <= b"00";
+			if reset = '1' then
+				COUNTER_CONTROL <= b"11";
+				ADDSUB_CONTROL <= b"11";
+			else
+				is_op_active := or_reduce(OP xor op_latch);
+				if(is_op_active = '1') then
+					op_latch := OP;
+				end if;
+				if (OP = b"00") then
+					COUNTER_CONTROL <= b"00";
+				elsif ((OP = "01" or OP = "10") and is_op_active = '1') then
+					COUNTER_CONTROL <= b"01";
+				else 
+					COUNTER_CONTROL <= b"00";
+				end if;
+				if((OP = "01" or OP = "10") and is_op_active = '1') then
+					if (CMPR_RESULT = b"10" and OP = b"01") then
+					-- to lowercase
+						ADDSUB_CONTROL <= b"01";
+					elsif (CMPR_RESULT = b"01" and OP = b"10") then
+					-- to uppercase
+						ADDSUB_CONTROL <= b"10";
+					else
+						ADDSUB_CONTROL <= b"00";
+					end if;
 				end if;
 			end if;
+			
+			
 
 		end if;
 	end process;

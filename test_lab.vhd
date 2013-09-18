@@ -145,6 +145,10 @@ BEGIN
 		OP <= "01";
 		wait for CLK_period*2;
 		
+		RESET <= '1';
+		wait for CLK_period*2;
+		
+		RESET <= '0';
 		OP <= "00";
 		wait for CLK_period*5;
 		
