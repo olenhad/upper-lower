@@ -51,7 +51,10 @@ begin
 	variable op_latch : std_logic_vector(1 downto 0) := b"00";
 	begin
 		if rising_edge(CLK) then
-		
+			if reset = '1' then
+				COUNTER_CONTROL <= b"11";
+				ADDSUB_CONTROL <= b"00";
+			end if;
 			is_op_active := or_reduce(OP xor op_latch);
 			if(is_op_active = '1') then
 				op_latch := OP;
