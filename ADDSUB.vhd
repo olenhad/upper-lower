@@ -49,9 +49,11 @@ begin
 			if (CONTROL = b"01") then
 			-- to lowercase
 				result_latch := std_logic_vector(unsigned(previous_data) + X"20");
-			elsif (CONTROL = b"11") then
+			elsif (CONTROL = b"10") then
 			-- to uppercase
 				result_latch := std_logic_vector(unsigned(previous_data) - X"20");
+			elsif (CONTROL = b"11") then
+				result_latch := x"00";
 			else
 				result_latch := previous_data;
 			end if;
