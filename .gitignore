@@ -3,5 +3,6 @@
 !*.vhd
 !*.gitignore
 !*.ucf
+!*.md
 !hw/
 !cw/
